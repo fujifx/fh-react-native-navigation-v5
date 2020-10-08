@@ -14,7 +14,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
 
+import { AuthContext } from "../components/context";
+
 const SignUpScreen = ({ navigation }) => {
+  const { signUp } = React.useContext(AuthContext);
+
   const [data, setData] = React.useState({
     email: "",
     password: "",
@@ -66,6 +70,10 @@ const SignUpScreen = ({ navigation }) => {
       ...data,
       secureTextEntry_ConfirmPassword: !data.secureTextEntry_ConfirmPassword,
     });
+  };
+
+  const loginHandle = (username, password) => {
+    signUp(username, password);
   };
 
   return (
@@ -132,9 +140,19 @@ const SignUpScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.button}>
-          <LinearGradient colors={["#08d4c4", "#3b5998"]} style={styles.signIn}>
-            <Text style={styles.textSignIn}>Sign Up</Text>
-          </LinearGradient>
+          <TouchableOpacity
+            style={styles.signIn}
+            onPress={() => {
+              loginHandle(data.email, data.password);
+            }}
+          >
+            <LinearGradient
+              colors={["#08d4c4", "#3b5998"]}
+              style={styles.signIn}
+            >
+              <Text style={styles.textSignIn}>Sign Up</Text>
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
         <View style={{ alignItems: "flex-end", justifyContent: "center" }}>
           <TouchableOpacity

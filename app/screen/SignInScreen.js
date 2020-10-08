@@ -14,6 +14,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
 
+import { AuthContext } from "../components/context";
+
 const SignInScreen = ({ navigation }) => {
   const [data, setData] = React.useState({
     email: "",
@@ -21,6 +23,8 @@ const SignInScreen = ({ navigation }) => {
     check_textInputChange: false,
     secureTextEntry: true,
   });
+
+  const { signIn } = React.useContext(AuthContext);
 
   const textInputChange_Email = (val) => {
     if (val.length > 0 && val.indexOf("@") > -1 && val.indexOf(".") > -1) {
@@ -50,6 +54,10 @@ const SignInScreen = ({ navigation }) => {
       ...data,
       secureTextEntry: !data.secureTextEntry,
     });
+  };
+
+  const loginHandle = (username, password) => {
+    signIn(username, password);
   };
 
   return (
@@ -93,10 +101,24 @@ const SignInScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
+        <TouchableOpacity>
+          <Text style={styles.forgotPassword}>Forgot password?</Text>
+        </TouchableOpacity>
+
         <View style={styles.button}>
-          <LinearGradient colors={["#08d4c4", "#3b5998"]} style={styles.signIn}>
-            <Text style={styles.textSignIn}>Sign In</Text>
-          </LinearGradient>
+          <TouchableOpacity
+            style={styles.signIn}
+            onPress={() => {
+              loginHandle(data.email, data.password);
+            }}
+          >
+            <LinearGradient
+              colors={["#08d4c4", "#3b5998"]}
+              style={styles.signIn}
+            >
+              <Text style={styles.textSignIn}>Sign In</Text>
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
         <View style={{ alignItems: "flex-end", justifyContent: "center" }}>
           <TouchableOpacity
@@ -141,6 +163,10 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     paddingVertical: 20,
     paddingHorizontal: 30,
+  },
+  forgotPassword: {
+    color: "#009387",
+    marginTop: 15,
   },
   title_header: {
     color: "#fff",
