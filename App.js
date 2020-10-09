@@ -69,22 +69,23 @@ const App = () => {
   );
 
   const authContext = React.useMemo(() => ({
-    signIn: async (userName, password) => {
+    // signIn: async (userName, password) => {
+    signIn: async (foundUser) => {
       // setUserToken("auth");
       // setIsLoading(false);
 
-      let userToken = null;
       // Below username and password should be check against API service
-      if (userName == "user" && password == "pass") {
-        try {
-          userToken = "auth"; // Should be generated via API
-          await AsyncStorage.setItem("userToken", userToken);
-        } catch (error) {
-          console.log("SignIn(): ", error);
-        }
+      // if (userName == "user" && password == "pass") {
+
+      let userToken = String(foundUser[0].userToken);
+      try {
+        await AsyncStorage.setItem("userToken", userToken);
+      } catch (error) {
+        console.log("SignIn(): ", error);
       }
+
       console.log("SignIn() - user token: ", userToken);
-      dispatch({ type: "LOGIN", id: userName, token: userToken });
+      dispatch({ type: "LOGIN", id: foundUser[0].userName, token: userToken });
     },
     signUp: async (userName, password) => {
       let userToken = null;
